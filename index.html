@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        * {
+        body {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -527,32 +527,60 @@
             { id: 25, name: "Лоток для кошек", price: 550, category: "🛏️ Аксессуары", description: "С бортиками и сеткой", image:"Images/лоток.jpg"  }
         ];
         
-        let users = [];
-        let donations = [];
-        let carts = {};
-        let currentUser = null;
-        let pendingDonation = null;
-        
-        // ==================== ЗАГРУЗКА ====================
-        function loadData() {
-            let savedUsers = localStorage.getItem('petshelter_users');
-            if (savedUsers) users = JSON.parse(savedUsers);
-            
-            let savedDonations = localStorage.getItem('petshelter_donations');
-            if (savedDonations) donations = JSON.parse(savedDonations);
-            
-            let savedCarts = localStorage.getItem('petshelter_carts');
-            if (savedCarts) carts = JSON.parse(savedCarts);
-            
-            let savedAnimals = localStorage.getItem('petshelter_animals');
-            if (savedAnimals) animals = JSON.parse(savedAnimals);
-            
-            let savedProducts = localStorage.getItem('petshelter_products');
-            if (savedProducts) products = JSON.parse(savedProducts);
-            
-            let savedUser = localStorage.getItem('petshelter_currentUser');
-            if (savedUser) currentUser = JSON.parse(savedUser);
+let users = [];
+let donations = [];
+let carts = {};
+let currentUser = null;
+let pendingDonation = null;
+
+// ==================== ЗАГРУЗКА С СЕРВЕРА ====================
+async function loadDataFromServer() {
+    try {
+        // Загружаем пользователей с сервера
+        const usersRes = await fetch('/api/users');
+        if (usersRes.ok) {
+            users = await usersRes.json();
         }
+
+        // Загружаем пожертвования
+        const donationsRes = await fetch('/api/donations');
+        if (donationsRes.ok) {
+            donations = await donationsRes.json();
+        }
+
+        // Проверяем авторизацию
+        const sessionRes = await fetch('/api/check_session');
+        const sessionData = await sessionRes.json();
+        if (sessionData.logged_in) {
+            currentUser = sessionData.user;
+            updateProfilePage();
+        }
+    } catch (error) {
+        console.log('Ошибка загрузки с сервера:', error);
+        loadData(); // резервный вариант (localStorage)
+    }
+}
+
+// ==================== ЗАГРУЗКА ИЗ LOCALSTORAGE (резерв) ====================
+function loadData() {
+    let savedUsers = localStorage.getItem('petshelter_users');
+    if (savedUsers) users = JSON.parse(savedUsers);
+
+    let savedDonations = localStorage.getItem('petshelter_donations');
+    if (savedDonations) donations = JSON.parse(savedDonations);
+
+    let savedCarts = localStorage.getItem('petshelter_carts');
+    if (savedCarts) carts = JSON.parse(savedCarts);
+
+    let savedAnimals = localStorage.getItem('petshelter_animals');
+    if (savedAnimals) animals = JSON.parse(savedAnimals);
+
+    let savedProducts = localStorage.getItem('petshelter_products');
+    if (savedProducts) products = JSON.parse(savedProducts);
+
+    let savedUser = localStorage.getItem('petshelter_currentUser');
+    if (savedUser) currentUser = JSON.parse(savedUser);
+}
         
         function saveAllData() {
             localStorage.setItem('petshelter_users', JSON.stringify(users));
@@ -741,7 +769,7 @@
         }
         
         // ==================== МАГАЗИН ====================
-        f// ==================== МАГАЗИН (ИСПРАВЛЕНО - ТЕПЕРЬ ФОТО РАБОТАЮТ) ====================
+        // ==================== МАГАЗИН (ИСПРАВЛЕНО - ТЕПЕРЬ ФОТО РАБОТАЮТ) ====================
 function showProducts() {
     // Группируем товары по категориям
     let groups = {};
@@ -934,7 +962,7 @@ function showProducts() {
             let username = document.getElementById('loginUsername').value;
             let password = document.getElementById('loginPassword').value;
             let user = users.find(u => u.username === username && u.password === password);
-            
+        }
             if (user) {
                 currentUser = user;
                 saveAllData();
@@ -942,21 +970,32 @@ function showProducts() {
                 updateProfilePage();
                 showPage('home');
             } else {
-                showMessage('❌ Неверный логин или пароль!', true);
-            }
-        }
-        
-        function logout() {
-            currentUser = null;
-            saveAllData();
-            showMessage('👋 Ты вышел из аккаунта');
+    showMessage('❌ Неверный логин или пароль!', true);
+}
+
+function logout() {
+    currentUser = null;
+    saveAllData();
+    showMessage('Ты вышел из аккаунта');
+    updateProfilePage();
+    showPage('home');
+}
+
+async function checkSession() {
+    try {
+        const res = await fetch('/api/check_session');
+        const data = await res.json();
+        if (data.logged_in) {
+            currentUser = data.user;
             updateProfilePage();
-            showPage('home');
+            console.log('Сессия восстановлена:', currentUser);
         }
-        
-        // ==================== ЗАПУСК ====================
-        loadData();
-        showPage('home');
-    </script>
-</body>
-</html>
+    } catch (error) {
+        console.log('Ошибка проверки сессии:', error);
+    }
+}
+
+// ============ ЗАПУСК ============
+loadData();
+checkSession();
+showPage('home');
