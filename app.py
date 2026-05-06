@@ -14,8 +14,7 @@ def static_files(path):
     return send_from_directory('.', path)
 
 if __name__ == '__main__':
-    print('\n🐾 Сервер "Лапки Добра" запущен!')
-    print('🐾 Откройте в браузере: http://localhost:5000\n')
-    print(f'📁 Файлы ищутся в: {os.getcwd()}')
-    print(f'📄 index.html существует: {os.path.exists("index.html")}\n')
-    app.run(debug=True, port=5000)
+    import os
+    port = int(os.environ.get('PORT', 5000))  # Берём порт Render или 5000 для локального запуска
+    print(f'Сервер "Лапки Добра" запущен на порту {port}!')
+    app.run(debug=False, host='0.0.0.0', port=port)  # Слушаем всё и используем правильный порт
