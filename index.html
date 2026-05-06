@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐾 Лапки Добра | Приют для животных</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #FFF5EB 0%, #FFE8D9 100%);
+            min-height: 100vh;
+            color: #4A3728;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #F5A623 0%, #F7C948 100%);
+            border-radius: 40px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(245, 166, 35, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: white;
+            font-size: 1.2em;
+        }
+
+        .nav {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 60px;
+            padding: 12px 24px;
+            margin-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .nav button {
+            background: transparent;
+            color: #4A3728;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav button:hover {
+            background: #F5A623;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .page {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 40px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .active-page {
+            display: block !important;
+        }
+
+        .page h2 {
+            font-size: 2em;
+            color: #F5A623;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-section {
+            margin-bottom: 50px;
+        }
+
+        .category-title {
+            font-size: 1.8em;
+            color: #F5A623;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #F5A623;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .category-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 28px;
+            padding: 24px;
+            width: 280px;
+            transition: all 0.3s ease;
+            border: 1px solid #FFE0B5;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(245, 166, 35, 0.15);
+            border-color: #F5A623;
+        }
+
+        .card .emoji {
+            font-size: 64px;
+            text-align: center;
+            display: block;
+            margin-bottom: 15px;
+        }
+        
+        /* Стиль для фотографий животных */
+        .animal-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 20px;
+            object-fit: cover;
+            margin: 0 auto 15px auto;
+            display: block;
+        }
+
+        .card h3 {
+            font-size: 1.3em;
+            color: #4A3728;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: #8B7355;
+            margin: 8px 0;
+        }
+
+        .price {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #F5A623;
+            margin: 10px 0;
+        }
+
+        button {
+            background: linear-gradient(135deg, #F5A623 0%, #F7C948 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        button.danger {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+        }
+
+        input {
+            padding: 12px 16px;
+            margin: 8px;
+            border-radius: 40px;
+            border: 2px solid #FFE0B5;
+            background: white;
+            width: 250px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #F5A623;
+        }
+
+        .donation-box {
+            background: linear-gradient(135deg, #FFF5EB 0%, #FFE8D9 100%);
+            border-radius: 28px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid #F5A623;
+        }
+
+        .donation-box h3 {
+            color: #F5A623;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .cart-item {
+            background: #FFF5EB;
+            border-radius: 20px;
+            padding: 15px 20px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #F5A623;
+        }
+
+        .total {
+            background: linear-gradient(135deg, #F5A623 0%, #F7C948 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 20px;
+            font-size: 1.3em;
+            font-weight: bold;
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        .user-info {
+            background: linear-gradient(135deg, #F5A623 0%, #F7C948 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 28px;
+            margin-bottom: 25px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 24px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid #FFE0B5;
+        }
+
+        .stat-card .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #F5A623;
+        }
+
+        .message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            z-index: 1000;
+            display: none;
+            animation: slideInRight 0.5s ease;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 15% auto;
+            padding: 30px;
+            border-radius: 30px;
+            width: 400px;
+            max-width: 90%;
+            text-align: center;
+            animation: slideDown 0.3s;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-content h3 {
+            color: #F5A623;
+            margin-bottom: 20px;
+        }
+
+        .modal-content input {
+            width: 90%;
+            margin: 10px 0;
+        }
+
+        .modal-content button {
+            margin: 10px;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                width: calc(50% - 20px);
+            }
+            input {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐾 Лапки Добра 🐾</h1>
+            <p>Тёплый дом для тех, кто ждёт любви</p>
+        </div>
+        
+        <div class="nav">
+            <button onclick="showPage('home')"><i class="fas fa-home"></i> Главная</button>
+            <button onclick="showPage('animals')"><i class="fas fa-paw"></i> Наши животные</button>
+            <button onclick="showPage('shop')"><i class="fas fa-store"></i> Магазин</button>
+            <button onclick="showPage('cart')"><i class="fas fa-shopping-cart"></i> Корзина</button>
+            <button onclick="showPage('profile')"><i class="fas fa-user"></i> Профиль</button>
+        </div>
+        
+        <div id="message" class="message"></div>
+        
+        <!-- Модальное окно для карты -->
+        <div id="cardModal" class="modal">
+            <div class="modal-content">
+                <h3><i class="fas fa-credit-card"></i> 💳 Пожертвование</h3>
+                <p>Введите данные карты для перевода</p>
+                <input type="text" id="cardNumber" placeholder="Номер карты (16 цифр)" maxlength="19">
+                <input type="text" id="cardExpiry" placeholder="ММ/ГГ" maxlength="5">
+                <input type="password" id="cardCvv" placeholder="CVV" maxlength="3">
+                <br>
+                <button onclick="confirmDonation()"><i class="fas fa-check"></i> Подтвердить</button>
+                <button onclick="closeModal()"><i class="fas fa-times"></i> Отмена</button>
+            </div>
+        </div>
+        
+        <!-- Главная страница -->
+        <div id="page-home" class="page active-page">
+            <h2><i class="fas fa-heart"></i> Добро пожаловать!</h2>
+            <p style="margin-bottom: 30px; font-size: 1.1em;">🐾 Мы - приют "Лапки Добра". Здесь живут котики, пёсики и другие зверята, которые очень ждут свою семью.</p>
+            
+            <div class="donation-box">
+                <h3><i class="fas fa-gift"></i> 💝 Копилка добра</h3>
+                <p>Даже 50 рублей помогут купить корм и лекарства!</p>
+                <input type="text" id="donorName" placeholder="Твоё имя">
+                <input type="number" id="donationAmount" placeholder="Сумма в рублях">
+                <button onclick="openCardModal()"><i class="fas fa-heart"></i> Пожертвовать</button>
+            </div>
+            
+            <div class="stats" id="successStats"></div>
+            
+            <h3><i class="fas fa-history"></i> 📜 Последние пожертвования</h3>
+            <div id="recentDonations"></div>
+        </div>
+        
+        <!-- Животные -->
+        <div id="page-animals" class="page">
+            <h2><i class="fas fa-paw"></i> Кто ищет дом?</h2>
+            <div id="animalsList"></div>
+        </div>
+        
+        <!-- Магазин -->
+        <div id="page-shop" class="page">
+            <h2><i class="fas fa-store"></i> 🛍️ Магазин для питомцев</h2>
+            <div id="productsList"></div>
+        </div>
+        
+        <!-- Корзина -->
+        <div id="page-cart" class="page">
+            <h2><i class="fas fa-shopping-cart"></i> 🛒 Моя корзина</h2>
+            <div id="cartItems"></div>
+            <div id="cartTotal"></div>
+        </div>
+        
+        <!-- Профиль -->
+        <div id="page-profile" class="page">
+            <div id="loginArea">
+                <h2><i class="fas fa-sign-in-alt"></i> 🔑 Вход в аккаунт</h2>
+                <input type="text" id="loginUsername" placeholder="Логин">
+                <input type="password" id="loginPassword" placeholder="Пароль">
+                <button onclick="login()"><i class="fas fa-sign-in-alt"></i> Войти</button>
+                <button onclick="showRegister()"><i class="fas fa-user-plus"></i> Зарегистрироваться</button>
+            </div>
+            
+            <div id="registerArea" style="display:none">
+                <h2><i class="fas fa-user-plus"></i> 📝 Регистрация</h2>
+                <input type="text" id="regUsername" placeholder="Логин">
+                <input type="password" id="regPassword" placeholder="Пароль">
+                <input type="text" id="regFullname" placeholder="Твоё имя">
+                <button onclick="register()"><i class="fas fa-check"></i> Зарегистрироваться</button>
+                <button onclick="hideRegister()"><i class="fas fa-arrow-left"></i> Назад</button>
+            </div>
+            
+            <div id="userArea" style="display:none">
+                <div class="user-info">
+                    <h2><i class="fas fa-user-circle"></i> 👋 Привет, <span id="userFullname"></span>!</h2>
+                    <p><i class="fas fa-user"></i> Логин: <span id="userLogin"></span></p>
+                    <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> Выйти</button>
+                </div>
+                <h3><i class="fas fa-gift"></i> 📦 Мои пожертвования</h3>
+                <div id="myDonations"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // ==================== ЖИВОТНЫЕ (15 штук) ====================
+        let animals = [
+            // Кошки
+            { id: 1, name: "Барсик", type: "Кошка", category: "🐱 Кошки", age: 8, description: "Любит лазить по шкафам и мурлыкать", adopted: false, image: "Images/barsik.jpg" },
+            { id: 2, name: "Мурка", type: "Кошка", category: "🐱 Кошки", age: 24, description: "Спокойная, ласковая, обожает внимание", adopted: false, image: "Images/murka.jpg" },
+            { id: 3, name: "Снежок", type: "Кошка", category: "🐱 Кошки", age: 12, description: "Белая пушистая красавица", adopted: false, image: "Images/snezok.jpg" },
+            { id: 4, name: "Рыжик", type: "Кот", category: "🐱 Кошки", age: 36, description: "Очень умный и самостоятельный", adopted: false, image: "Images/rizik.jpg" },
+            // Собаки
+            { id: 5, name: "Рекс", type: "Собака", category: "🐕 Собаки", age: 14, description: "Верный друг, любит играть с мячиком", adopted: false, image: "Images/recs.jpg" },
+            { id: 6, name: "Джек", type: "Собака", category: "🐕 Собаки", age: 36, description: "Энергичный, весёлый, ладит с детьми", adopted: false, image: "Images/dzec.jpg" },
+            { id: 7, name: "Лайма", type: "Собака", category: "🐕 Собаки", age: 20, description: "Добрая и преданная", adopted: false, image: "Images/laima.jpg" },
+            { id: 8, name: "Бим", type: "Собака", category: "🐕 Собаки", age: 48, description: "Спокойный и мудрый пёс", adopted: false, image: "Images/bim.jpg" },
+            // Хомяки
+            { id: 9, name: "Хома", type: "Хомяк", category: "🐹 Хомяки", age: 4, description: "Пухленький и забавный", adopted: false, image: "Images/хомяк.jpg" },
+            { id: 10, name: "Шустрик", type: "Хомяк", category: "🐹 Хомяки", age: 3, description: "Очень быстрый, любит бегать в колесе", adopted: false, image: "Images/хомяк1.jpg" },
+            // Попугаи
+            { id: 11, name: "Кеша", type: "Попугай", category: "🦜 Попугаи", age: 10, description: "Говорун, знает 5 слов", adopted: false, image: "Images/попугай.jpg" },
+            { id: 12, name: "Рио", type: "Попугай", category: "🦜 Попугаи", age: 6, description: "Любит петь и танцевать", adopted: false, image: "Images/попугай1.jpg" },
+            { id: 13, name: "Жако", type: "Попугай", category: "🦜 Попугаи", age: 24, description: "Очень умный, имитирует звуки", adopted: false, image: "Images/попугай2.jpg" },
+            // Кролики
+            { id: 14, name: "Пушок", type: "Кролик", category: "🐰 Кролики", age: 5, description: "Пушистый и добрый, любит морковку", adopted: false, image: "Images/кролик.jpg" },
+            { id: 15, name: "Беляш", type: "Кролик", category: "🐰 Кролики", age: 8, description: "Белый как снег, очень ласковый", adopted: false, image: "Images/кролик1.jpg" }
+        ];
+        
+        // ==================== ТОВАРЫ (25 штук - корма, игрушки, аксессуары) ====================
+        let products = [
+            // Корма
+            { id: 1, name: "Корм для кошек", price: 350, category: "🍖 Корма", description: "Premium корм, 2 кг", image:"Images/corm_premium.jpg" },
+            { id: 2, name: "Корм для собак", price: 420, category: "🍖 Корма", description: "Сбалансированный корм, 2.5 кг", image:"Images/сбалансированный.jpg" },
+            { id: 3, name: "Корм для хомяков", price: 180, category: "🍖 Корма", description: "Зерновая смесь, 500 г", image:"Images/зерновая.jpg" },
+            { id: 4, name: "Корм для попугаев", price: 250, category: "🍖 Корма", description: "Смесь с фруктами, 1 кг", image:"Images/сфруктами.jpg" },
+            { id: 5, name: "Корм для кроликов", price: 220, category: "🍖 Корма", description: "Сено с витаминами, 1 кг", image:"Images/сено.jpg" },
+            { id: 6, name: "Консервы для кошек", price: 120, category: "🍖 Корма", description: "Паучи, 6 шт", image:"Images/паучи.jpg" },
+            { id: 7, name: "Консервы для собак", price: 150, category: "🍖 Корма", description: "Мясное ассорти, 6 шт", image:"Images/консерва.jpg" },
+            // Игрушки
+            { id: 8, name: "Игрушка-мышка", price: 120, category: "🧸 Игрушки", description: "Для кошек, с кошачьей мятой", image:"Images/мышка.jpg"  },
+            { id: 9, name: "Мячик для собак", price: 150, category: "🧸 Игрушки", description: "Прочный резиновый мяч", image:"Images/мячик.jpg"  },
+            { id: 10, name: "Удочка для кошек", price: 200, category: "🧸 Игрушки", description: "С перьями и колокольчиком", image:"Images/удочка.jpg" },
+            { id: 11, name: "Колесо для хомяка", price: 350, category: "🧸 Игрушки", description: "Бесшумное колесо", image:"Images/колесо.jpg"  },
+            { id: 12, name: "Зеркальце для попугая", price: 180, category: "🧸 Игрушки", description: "С колокольчиком", image:"Images/зеркало.jpg"  },
+            { id: 13, name: "Канатик для собаки", price: 250, category: "🧸 Игрушки", description: "Для перетягивания", image:"Images/канатик.jpg"  },
+            { id: 14, name: "Тоннель для кошки", price: 450, category: "🧸 Игрушки", description: "Складной, 1.5 м", image:"Images/тоннель.jpg"  },
+            { id: 15, name: "Интерактивный мяч", price: 300, category: "🧸 Игрушки", description: "Светится и прыгает", image:"Images/интерактив.jpg"  },
+            // Аксессуары и уход
+            { id: 16, name: "Лежанка уютная", price: 890, category: "🛏️ Аксессуары", description: "Мягкая, для кошек/собак", image:"Images/лежанка.jpg"  },
+            { id: 17, name: "Расчёска для шерсти", price: 200, category: "🛏️ Аксессуары", description: "Массажная", image:"Images/расческа.jpg"  },
+            { id: 18, name: "Витамины", price: 450, category: "🛏️ Аксессуары", description: "Комплекс для здоровья", image:"Images/витамины.jpg"  },
+            { id: 19, name: "Клетка для хомяка", price: 1200, category: "🛏️ Аксессуары", description: "С поилкой и домиком", image:"Images/клетка.jpg"  },
+            { id: 20, name: "Переноска для кошек", price: 1500, category: "🛏️ Аксессуары", description: "Удобная, пластиковая", image:"Images/переноска.jpg"  },
+            { id: 21, name: "Ошейник для собаки", price: 350, category: "🛏️ Аксессуары", description: "Светоотражающий", image:"Images/ошейник.jpg"  },
+            { id: 22, name: "Шампунь для животных", price: 280, category: "🛏️ Аксессуары", description: "Гипоаллергенный", image:"Images/шампунь.jpg"  },
+            { id: 23, name: "Когтеточка", price: 650, category: "🛏️ Аксессуары", description: "Настенная, 60 см", image:"Images/когтеточка.jpg"  },
+            { id: 24, name: "Поилка автоматическая", price: 390, category: "🛏️ Аксессуары", description: "На 1.5 литра", image:"Images/поилка.jpg"  },
+            { id: 25, name: "Лоток для кошек", price: 550, category: "🛏️ Аксессуары", description: "С бортиками и сеткой", image:"Images/лоток.jpg"  }
+        ];
+        
+        let users = [];
+        let donations = [];
+        let carts = {};
+        let currentUser = null;
+        let pendingDonation = null;
+        
+        // ==================== ЗАГРУЗКА ====================
+        function loadData() {
+            let savedUsers = localStorage.getItem('petshelter_users');
+            if (savedUsers) users = JSON.parse(savedUsers);
+            
+            let savedDonations = localStorage.getItem('petshelter_donations');
+            if (savedDonations) donations = JSON.parse(savedDonations);
+            
+            let savedCarts = localStorage.getItem('petshelter_carts');
+            if (savedCarts) carts = JSON.parse(savedCarts);
+            
+            let savedAnimals = localStorage.getItem('petshelter_animals');
+            if (savedAnimals) animals = JSON.parse(savedAnimals);
+            
+            let savedProducts = localStorage.getItem('petshelter_products');
+            if (savedProducts) products = JSON.parse(savedProducts);
+            
+            let savedUser = localStorage.getItem('petshelter_currentUser');
+            if (savedUser) currentUser = JSON.parse(savedUser);
+        }
+        
+        function saveAllData() {
+            localStorage.setItem('petshelter_users', JSON.stringify(users));
+            localStorage.setItem('petshelter_donations', JSON.stringify(donations));
+            localStorage.setItem('petshelter_carts', JSON.stringify(carts));
+            localStorage.setItem('petshelter_animals', JSON.stringify(animals));
+            localStorage.setItem('petshelter_products', JSON.stringify(products));
+            if (currentUser) {
+                localStorage.setItem('petshelter_currentUser', JSON.stringify(currentUser));
+            } else {
+                localStorage.removeItem('petshelter_currentUser');
+            }
+        }
+        
+        function showMessage(text, isError = false) {
+            let msgDiv = document.getElementById('message');
+            msgDiv.textContent = text;
+            msgDiv.style.background = isError ? 'linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%)' : 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)';
+            msgDiv.style.display = 'block';
+            setTimeout(() => { msgDiv.style.display = 'none'; }, 3000);
+        }
+        
+        function showPage(pageName) {
+            document.getElementById('page-home').classList.remove('active-page');
+            document.getElementById('page-animals').classList.remove('active-page');
+            document.getElementById('page-shop').classList.remove('active-page');
+            document.getElementById('page-cart').classList.remove('active-page');
+            document.getElementById('page-profile').classList.remove('active-page');
+            
+            document.getElementById('page-' + pageName).classList.add('active-page');
+            
+            if (pageName === 'home') updateHomePage();
+            if (pageName === 'animals') showAnimals();
+            if (pageName === 'shop') showProducts();
+            if (pageName === 'cart') showCart();
+            if (pageName === 'profile') updateProfilePage();
+        }
+        
+        // ==================== МОДАЛЬНОЕ ОКНО ====================
+        function openCardModal() {
+            let name = document.getElementById('donorName').value;
+            let amount = parseFloat(document.getElementById('donationAmount').value);
+            
+            if (!name || !amount || amount <= 0) {
+                showMessage('Введи имя и сумму!', true);
+                return;
+            }
+            
+            pendingDonation = { name: name, amount: amount };
+            document.getElementById('cardModal').style.display = 'block';
+        }
+        
+        function closeModal() {
+            document.getElementById('cardModal').style.display = 'none';
+            pendingDonation = null;
+            document.getElementById('cardNumber').value = '';
+            document.getElementById('cardExpiry').value = '';
+            document.getElementById('cardCvv').value = '';
+        }
+        
+        function confirmDonation() {
+            let cardNumber = document.getElementById('cardNumber').value;
+            let cardExpiry = document.getElementById('cardExpiry').value;
+            let cardCvv = document.getElementById('cardCvv').value;
+            
+            if (!cardNumber || !cardExpiry || !cardCvv) {
+                showMessage('Заполни все данные карты!', true);
+                return;
+            }
+            
+            let cleanNumber = cardNumber.replace(/\s/g, '');
+            if (cleanNumber.length < 16) {
+                showMessage('Номер карты должен содержать 16 цифр', true);
+                return;
+            }
+            
+            if (pendingDonation) {
+                donations.push({
+                    donorName: pendingDonation.name,
+                    amount: pendingDonation.amount,
+                    date: new Date().toLocaleString(),
+                    cardLast4: cleanNumber.slice(-4)
+                });
+                saveAllData();
+                showMessage(`❤️ Спасибо, ${pendingDonation.name}! Ты помог(ла) на ${pendingDonation.amount} рублей!`);
+                document.getElementById('donorName').value = '';
+                document.getElementById('donationAmount').value = '';
+                updateHomePage();
+            }
+            closeModal();
+        }
+        
+        // ==================== ГЛАВНАЯ ====================
+        function updateHomePage() {
+            let adoptedCount = animals.filter(a => a.adopted).length;
+            let donationSum = donations.reduce((sum, d) => sum + d.amount, 0);
+            let availableCount = animals.filter(a => !a.adopted).length;
+            
+            document.getElementById('successStats').innerHTML = `
+                <div class="stat-card"><div class="stat-number">${adoptedCount}</div><div class="stat-label">🐾 Обрели дом</div></div>
+                <div class="stat-card"><div class="stat-number">${availableCount}</div><div class="stat-label">🐕 Ждут семью</div></div>
+                <div class="stat-card"><div class="stat-number">${donationSum} ₽</div><div class="stat-label">❤️ Собрано</div></div>
+            `;
+            
+            let recentDonations = [...donations].reverse().slice(0, 5);
+            let donationsHtml = '';
+            if (recentDonations.length === 0) {
+                donationsHtml = '<div class="cart-item">😊 Пока нет пожертвований. Будь первым! ❤️</div>';
+            } else {
+                recentDonations.forEach(d => {
+                    donationsHtml += `<div class="cart-item"><span>🐾 ${d.donorName}</span><span>💰 ${d.amount} ₽</span><span>📅 ${d.date}</span></div>`;
+                });
+            }
+            document.getElementById('recentDonations').innerHTML = donationsHtml;
+        }
+        
+        // ==================== ЖИВОТНЫЕ (ИСПРАВЛЕНО - ТЕПЕРЬ ФОТО РАБОТАЮТ) ====================
+        function showAnimals() {
+            // Группируем по категориям
+            let groups = {};
+            let availableAnimals = animals.filter(a => !a.adopted);
+            
+            availableAnimals.forEach(animal => {
+                if (!groups[animal.category]) {
+                    groups[animal.category] = [];
+                }
+                groups[animal.category].push(animal);
+            });
+            
+            let html = '';
+            for (let categoryName in groups) {
+                html += `
+                    <div class="category-section">
+                        <div class="category-title">
+                            <span>${categoryName}</span>
+                            <span style="font-size: 0.6em; background:#F5A62320; padding:5px 12px; border-radius:30px;">${groups[categoryName].length}</span>
+                        </div>
+                        <div class="category-grid">
+                `;
+                
+                groups[categoryName].forEach(animal => {
+                    // ПРОВЕРКА: если это путь к картинке (содержит .jpg, .png или /) - показываем фото
+                    let imageHtml = '';
+                    if (animal.image && (animal.image.includes('.jpg') || animal.image.includes('.png') || animal.image.includes('/') || animal.image.includes('.jpeg'))) {
+                        imageHtml = `<img src="${animal.image}" class="animal-photo" onerror="this.style.display='none'">`;
+                    } else {
+                        imageHtml = `<div class="emoji">${animal.image}</div>`;
+                    }
+                    
+                    html += `
+                        <div class="card">
+                            ${imageHtml}
+                            <h3>${animal.name}</h3>
+                            <p><strong>${animal.type}</strong> • ${animal.age} мес.</p>
+                            <p>${animal.description}</p>
+                            <button onclick="adoptAnimal(${animal.id})"><i class="fas fa-home"></i> 🏡 Приютить</button>
+                        </div>
+                    `;
+                });
+                
+                html += `</div></div>`;
+            }
+            
+            if (availableAnimals.length === 0) {
+                html = '<div style="text-align:center; padding:40px;"><p style="font-size:1.3em;">🎉 Ура! Все животные нашли дом! 🎉</p><p>Спасибо всем, кто помог! ❤️</p></div>';
+            }
+            
+            document.getElementById('animalsList').innerHTML = html;
+        }
+        
+        function adoptAnimal(animalId) {
+            if (!currentUser) {
+                showMessage('Сначала зарегистрируйся или войди!', true);
+                showPage('profile');
+                return;
+            }
+            
+            let animal = animals.find(a => a.id === animalId);
+            if (animal && !animal.adopted) {
+                animal.adopted = true;
+                saveAllData();
+                showMessage(`🎉 Поздравляем! ${animal.name} теперь в твоей семье! 🎉`);
+                showAnimals();
+                updateHomePage();
+            }
+        }
+        
+        // ==================== МАГАЗИН ====================
+        f// ==================== МАГАЗИН (ИСПРАВЛЕНО - ТЕПЕРЬ ФОТО РАБОТАЮТ) ====================
+function showProducts() {
+    // Группируем товары по категориям
+    let groups = {};
+    products.forEach(product => {
+        if (!groups[product.category]) {
+            groups[product.category] = [];
+        }
+        groups[product.category].push(product);
+    });
+    
+    let html = '';
+    for (let categoryName in groups) {
+        html += `
+            <div class="category-section">
+                <div class="category-title">
+                    <span>${categoryName}</span>
+                    <span style="font-size: 0.6em; background:#F5A62320; padding:5px 12px; border-radius:30px;">${groups[categoryName].length} товаров</span>
+                </div>
+                <div class="category-grid">
+        `;
+        
+        groups[categoryName].forEach(product => {
+            // ПРОВЕРКА: если это путь к картинке - показываем фото, иначе эмодзи
+            let imageHtml = '';
+            if (product.image && (product.image.includes('.jpg') || product.image.includes('.png') || product.image.includes('/') || product.image.includes('.jpeg'))) {
+                imageHtml = `<img src="${product.image}" class="product-photo" style="width: 100px; height: 100px; border-radius: 20px; object-fit: cover; margin: 0 auto 15px auto; display: block;" onerror="this.style.display='none'">`;
+            } else if (product.image && !product.image.includes('/')) {
+                imageHtml = `<div style="font-size: 64px; text-align: center; margin-bottom: 15px;">${product.image}</div>`;
+            } else {
+                let defaultEmoji = product.category.includes("Корма") ? "🍖" : (product.category.includes("Игрушки") ? "🧸" : "🛏️");
+                imageHtml = `<div style="font-size: 64px; text-align: center; margin-bottom: 15px;">${defaultEmoji}</div>`;
+            }
+            
+            html += `
+                <div class="card">
+                    ${imageHtml}
+                    <h3>${product.name}</h3>
+                    <p>${product.description || product.category}</p>
+                    <div class="price">💰 ${product.price} ₽</div>
+                    <button onclick="addToCart(${product.id})"><i class="fas fa-cart-plus"></i> 🛒 В корзину</button>
+                </div>
+            `;
+        });
+        
+        html += `</div></div>`;
+    }
+    
+    document.getElementById('productsList').innerHTML = html;
+}
+                
+                groups[categoryName].forEach(product => {
+                    let emoji = product.image || (product.category.includes("Корма") ? "🍖" : "🧸");
+                    html += `
+                        <div class="card">
+                            <div class="emoji">${emoji}</div>
+                            <h3>${product.name}</h3>
+                            <p>${product.description || product.category}</p>
+                            <div class="price">💰 ${product.price} ₽</div>
+                            <button onclick="addToCart(${product.id})"><i class="fas fa-cart-plus"></i> 🛒 В корзину</button>
+                        </div>
+                    `;
+                });
+                
+                html += `</div></div>`;
+            
+            
+            document.getElementById('productsList').innerHTML = html;
+        
+        
+        function addToCart(productId) {
+            if (!currentUser) {
+                showMessage('Сначала войди в аккаунт!', true);
+                showPage('profile');
+                return;
+            }
+            
+            if (!carts[currentUser.username]) carts[currentUser.username] = [];
+            let cart = carts[currentUser.username];
+            let existingItem = cart.find(item => item.productId === productId);
+            
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ productId: productId, quantity: 1 });
+            }
+            saveAllData();
+            showMessage('✅ Товар добавлен в корзину! 🛒');
+        }
+        
+        // ==================== КОРЗИНА ====================
+        function showCart() {
+            if (!currentUser) {
+                document.getElementById('cartItems').innerHTML = '<div class="cart-item">🔐 Войди в аккаунт, чтобы увидеть корзину</div>';
+                document.getElementById('cartTotal').innerHTML = '';
+                return;
+            }
+            
+            let cart = carts[currentUser.username] || [];
+            if (cart.length === 0) {
+                document.getElementById('cartItems').innerHTML = '<div class="cart-item">🛒 Корзина пуста. Загляни в магазин!</div>';
+                document.getElementById('cartTotal').innerHTML = '';
+                return;
+            }
+            
+            let html = '';
+            let total = 0;
+            cart.forEach((item, index) => {
+                let product = products.find(p => p.id === item.productId);
+                if (product) {
+                    let itemTotal = product.price * item.quantity;
+                    total += itemTotal;
+                    html += `
+                        <div class="cart-item">
+                            <div><strong>${product.name}</strong><br>${product.price} ₽ × ${item.quantity} = ${itemTotal} ₽</div>
+                            <button class="danger" onclick="removeFromCart(${index})"><i class="fas fa-trash"></i> Удалить</button>
+                        </div>
+                    `;
+                }
+            });
+            document.getElementById('cartItems').innerHTML = html;
+            document.getElementById('cartTotal').innerHTML = `<div class="total">💵 Итого: ${total} ₽</div>`;
+        }
+        
+        function removeFromCart(index) {
+            if (currentUser && carts[currentUser.username]) {
+                carts[currentUser.username].splice(index, 1);
+                saveAllData();
+                showCart();
+                showMessage('🗑️ Товар удалён из корзины');
+            }
+        }
+        
+        // ==================== ПРОФИЛЬ ====================
+        function updateProfilePage() {
+            if (currentUser) {
+                document.getElementById('loginArea').style.display = 'none';
+                document.getElementById('registerArea').style.display = 'none';
+                document.getElementById('userArea').style.display = 'block';
+                document.getElementById('userFullname').innerHTML = currentUser.fullname;
+                document.getElementById('userLogin').innerHTML = currentUser.username;
+                
+                let myDonations = donations.filter(d => d.donorName === currentUser.fullname || d.donorName === currentUser.username);
+                let donationsHtml = '';
+                if (myDonations.length === 0) {
+                    donationsHtml = '<div class="cart-item">📭 Ты ещё не делал(а) пожертвований</div>';
+                } else {
+                    myDonations.forEach(d => {
+                        donationsHtml += `<div class="cart-item"><span>💰 ${d.amount} ₽</span><span>📅 ${d.date}</span></div>`;
+                    });
+                }
+                document.getElementById('myDonations').innerHTML = donationsHtml;
+            } else {
+                document.getElementById('loginArea').style.display = 'block';
+                document.getElementById('registerArea').style.display = 'none';
+                document.getElementById('userArea').style.display = 'none';
+            }
+        }
+        
+        function showRegister() {
+            document.getElementById('loginArea').style.display = 'none';
+            document.getElementById('registerArea').style.display = 'block';
+        }
+        
+        function hideRegister() {
+            document.getElementById('loginArea').style.display = 'block';
+            document.getElementById('registerArea').style.display = 'none';
+        }
+        
+        function register() {
+            let username = document.getElementById('regUsername').value;
+            let password = document.getElementById('regPassword').value;
+            let fullname = document.getElementById('regFullname').value;
+            
+            if (!username || !password || !fullname) {
+                showMessage('Заполни все поля!', true);
+                return;
+            }
+            if (users.find(u => u.username === username)) {
+                showMessage('Такой логин уже существует!', true);
+                return;
+            }
+            
+            users.push({ username: username, password: password, fullname: fullname });
+            saveAllData();
+            showMessage('✅ Регистрация успешна! Теперь войди в аккаунт.');
+            hideRegister();
+        }
+        
+        function login() {
+            let username = document.getElementById('loginUsername').value;
+            let password = document.getElementById('loginPassword').value;
+            let user = users.find(u => u.username === username && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                saveAllData();
+                showMessage(`👋 Добро пожаловать, ${user.fullname}!`);
+                updateProfilePage();
+                showPage('home');
+            } else {
+                showMessage('❌ Неверный логин или пароль!', true);
+            }
+        }
+        
+        function logout() {
+            currentUser = null;
+            saveAllData();
+            showMessage('👋 Ты вышел из аккаунта');
+            updateProfilePage();
+            showPage('home');
+        }
+        
+        // ==================== ЗАПУСК ====================
+        loadData();
+        showPage('home');
+    </script>
+</body>
+</html>
