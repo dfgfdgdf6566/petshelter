@@ -969,7 +969,6 @@ function showProducts() {
                 showMessage(`👋 Добро пожаловать, ${user.fullname}!`);
                 updateProfilePage();
                 showPage('home');
-            } else {
     showMessage('❌ Неверный логин или пароль!', true);
 }
 
@@ -995,7 +994,7 @@ async function checkSession() {
     }
 }
 
-// ============ ЗАПУСК ============
+// ========= ЗАПУСК =========
 loadData();
 checkSession();
 showPage('home');
